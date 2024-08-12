@@ -1,1 +1,25 @@
 ####this is a trial code##########
+#set($projectId = $page.getReference.projectId)
+<table border=2>
+<tr>
+<th>workitem Id </th>
+<th> head revision </th>
+<th>all revisions </th>
+#set($workItems=$trackerService.queryWorkItems("project.id:$projectId AND type:systemrequirement","id"))
+#foreach($wi in $workItems)
+<tr>
+<td>
+$transaction.workItems.getBy.oldApiObject($wi).render().withLinks.openLinksInNewWindow
+</td>
+<td>$wi.getDataRevision()</td>
+
+ <td> 
+ #set($history=$wi.getDataSvc().getObjectHistory($wi))
+ #foreach($h in $history)
+ $h.getRevision()
+#end
+</td>
+</tr>
+
+#end
+</table>
